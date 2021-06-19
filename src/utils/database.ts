@@ -16,8 +16,12 @@ const mongooseOptions = {
 };
 
 export const mongooseConnect = async () => {
-  await mongoose.connect(database, mongooseOptions);
-  return "connected";
+  try {
+    await mongoose.connect(database, mongooseOptions);
+    return "connected";
+  } catch (error) {
+    console.log(`mongoose.connect error: ${error.name} ${error.message}`);
+  }
 };
 
 export const mongooseClose = async () => {
