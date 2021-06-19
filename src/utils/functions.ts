@@ -3,5 +3,6 @@ export const response = (
   message: string,
   data: object | null
 ) => {
-  return { success, message, data };
+  const res = { success, message, data };
+  return res;
 };
