@@ -13,6 +13,6 @@ import { mongooseConnect } from "./utils/database";
       });
     }
   } catch (error) {
-    console.log(`Error: ${error.name} ${error.message}`);
+    console.log(`DB Error: ${error.name} ${error.message}`);
   }
 })();
