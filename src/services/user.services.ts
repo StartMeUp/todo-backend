@@ -1,10 +1,8 @@
-const signup = async (data: {
-  name: string;
-  surname: string;
-  email: string;
-  password: string;
-}) => {
-  return { data };
+import { z } from "zod";
+import reqSchemas from "../utils/reqSchemas";
+
+const signup = async (data: z.infer<typeof reqSchemas["/user/signup"]>) => {
+  return data;
 };
 
 export default { signup };

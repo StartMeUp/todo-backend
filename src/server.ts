@@ -10,5 +10,5 @@ try {
     );
   });
 } catch (error) {
-  console.log(`DB Error: ${error.name} ${error.message}`);
+  console.log(`Error: ${error.name} ${error.message}`);
 }

@@ -19,7 +19,8 @@
     "express": "^4.17.1",
     "flat": "^5.0.2",
     "mongoose": "^5.12.12",
-    "uid2": "0.0.3"
+    "uid2": "0.0.3",
+    "zod": "^3.2.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",
