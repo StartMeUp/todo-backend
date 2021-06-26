@@ -10,8 +10,7 @@ export const response = (
   message: string,
   data: { [key: string]: any } | null
 ) => {
-  const res = { success, message, data };
-  return res;
+  return { success, message, data };
 };
 
 // get encryption keys for user
