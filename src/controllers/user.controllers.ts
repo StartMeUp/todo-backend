@@ -11,4 +11,15 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export default { signup };
+const signin = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await user.signin(req.body);
+    res
+      .status(200)
+      .json(response(true, "user successfully authenticated", result));
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default { signup, signin };

@@ -1,6 +1,6 @@
 import Model from "../models";
 import { CustomError } from "../middlewares/error.middleware";
-import { hashPassword } from "../utils/functions";
+import { hashPassword, checkPassword } from "../utils/functions";
 
 const signup = async (data: {
   email: string;
@@ -28,4 +28,19 @@ const signup = async (data: {
   return { token: newUser.token };
 };
 
-export default { signup };
+const signin = async (data: { email: string; password: string }) => {
+  //1. destructure data
+  const { password, email } = data;
+
+  //2. check email to get user
+  const user = await Model.User.findOne({ email });
+  if (!user) throw new CustomError("Unauthorized, email doesn't exist", 401);
+
+  //3. check password
+  checkPassword(user, password);
+
+  //4. return user token
+  return { token: user.token };
+};
+
+export default { signup, signin };

@@ -5,6 +5,9 @@ import {
   mongooseClose,
   dropAllCollections,
 } from "../src/utils/database";
+import Model from "../src/models";
+
+import { response as res } from "../src/utils/functions";
 
 const johnDoe = {
   name: "John",
@@ -24,7 +27,7 @@ let newUser: object;
 
 beforeAll(async () => await mongooseConnect());
 
-describe("Testing create user", () => {
+describe("Testing user signup", () => {
   it("should throw an 400 error and send proper response if req data is wrong", async () => {
     let response: any;
     try {
@@ -66,6 +69,70 @@ describe("Testing create user", () => {
       message: "User already exists",
       data: null,
     });
+  });
+});
+
+describe("Testing user signin", () => {
+  it("should throw a 400 error and send proper response if req data is incorrect", async () => {
+    let response: any;
+    try {
+      response = await request(app)
+        .get("/user/signin")
+        .send({ email: "johnemail", password: undefined });
+    } catch (error) {
+      expect(error.message).toBe(
+        "Request Schema error at /user/signin, Issues: email, password"
+      );
+    }
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({
+      success: false,
+      message: "Request Schema error at /user/signin, Issues: email, password",
+      data: null,
+    });
+  });
+
+  it("should throw a 401 error and send proper response if email is wrong ", async () => {
+    let response: any;
+    try {
+      response = await request(app)
+        .get("/user/signin")
+        .send({ email: "john@mail.com", password: "azerty" });
+    } catch (error) {
+      expect(error.message).toBe("Unauthorized, email doesn't exist");
+    }
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual(
+      res(false, "Unauthorized, email doesn't exist", null)
+    );
+  });
+
+  it("should throw a 401 error and send proper response if password is wrong ", async () => {
+    let response: any;
+    try {
+      response = await request(app)
+        .get("/user/signin")
+        .send({ email: "john@email.com", password: "azertyazerty" });
+    } catch (error) {
+      expect(error.message).toBe("Unauthorized, wrong password");
+    }
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual(
+      res(false, "Unauthorized, wrong password", null)
+    );
+  });
+
+  it("should send a 200 status and a proper response with user's token if req data is correct", async () => {
+    const user = await Model.User.findOne({ email: johnDoe.email });
+    const response = await request(app)
+      .get("/user/signin")
+      .send({ email: "john@email.com", password: "azerty" });
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(
+      res(true, "user successfully authenticated", {
+        token: `${user ? user.token : "error test user signin"}`,
+      })
+    );
   });
 });
 
