@@ -1,8 +1,6 @@
 import { Application, Request, Response, NextFunction } from "express";
 import { response } from "../utils/functions";
 
-const errorNames: string[] = [];
-
 export class CustomError extends Error {
   constructor(message: string, statusCode: number = 400) {
     super(message);
