@@ -27,7 +27,7 @@ const preRoutesMiddleware = (app: Application) => {
         ReqSchema.parse(req.body);
         next();
       } catch (error) {
-        console.log(error.issues);
+        console.log("Zod issue", error.issues);
         throw new CustomError(
           `Request Schema error at ${path}, Issues: ${zodIssues(error.issues)}`
         );

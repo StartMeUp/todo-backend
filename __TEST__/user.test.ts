@@ -1,5 +1,10 @@
 import request from "supertest";
 import app from "../src/app";
+import {
+  mongooseConnect,
+  mongooseClose,
+  dropAllCollections,
+} from "../src/utils/database";
 
 const johnDoe = {
   name: "John",
@@ -11,27 +16,16 @@ const johnDoe = {
 const wrongJohnDoe = {
   name: "John",
   surname: "Doe",
-  email: "john@email",
+  email: "johnemail",
   password: 12,
 };
 
-describe("Testing create user", () => {
-  it("should send a 201 status and a proper response if req data is correct", async () => {
-    const response = await request(app).post("/user/signup").send(johnDoe);
-    expect(response.status).toBe(201);
-    expect(response.body).toEqual({
-      success: true,
-      message: "user successfully created",
-      data: {
-        name: "John",
-        surname: "Doe",
-        email: "john@email.com",
-        password: "azerty",
-      },
-    });
-  });
+let newUser: object;
 
-  it("should throw an error, send a 400 status and a proper response if req data is wrong", async () => {
+beforeAll(async () => await mongooseConnect());
+
+describe("Testing create user", () => {
+  it("should throw an 400 error and send proper response if req data is wrong", async () => {
     let response: any;
     try {
       response = await request(app).post("/user/signup").send(wrongJohnDoe);
@@ -47,4 +41,35 @@ describe("Testing create user", () => {
       data: null,
     });
   });
+
+  it("should send a 201 status and a proper response if req data is correct", async () => {
+    const response = await request(app).post("/user/signup").send(johnDoe);
+    const token: string = response.body.data.token;
+    expect(response.status).toBe(201);
+    expect(response.body).toEqual({
+      success: true,
+      message: "user successfully created",
+      data: { token },
+    });
+  });
+
+  it("should throw a 409 error and send proper response if user already exists", async () => {
+    let response: any;
+    try {
+      response = await request(app).post("/user/signup").send(johnDoe);
+    } catch (error) {
+      expect(error.message).toBe("User already exists");
+    }
+    expect(response.status).toBe(409);
+    expect(response.body).toEqual({
+      success: false,
+      message: "User already exists",
+      data: null,
+    });
+  });
+});
+
+afterAll(async () => {
+  await dropAllCollections();
+  await mongooseClose();
 });
