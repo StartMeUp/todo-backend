@@ -43,4 +43,17 @@ const signin = async (data: { email: string; password: string }) => {
   return { token: user.token };
 };
 
-export default { signup, signin };
+const account = async (token: string) => {
+  //1. get the user data
+  const user = await Model.User.findOne({ token }).lean();
+  if (user) {
+    const { hash, salt, ...rest } = user;
+    return rest;
+  } else {
+    throw new CustomError(
+      "An error has occured while retrieving the user info"
+    );
+  }
+};
+
+export default { signup, signin, account };

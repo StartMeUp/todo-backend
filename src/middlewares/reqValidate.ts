@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { Request, Response, NextFunction } from "express";
-import { CustomError } from "../middlewares/error.middleware";
+import { CustomError } from "./error.middleware";
 
 interface MetadataObj {
   [key: string]: z.AnyZodObject;
@@ -8,10 +8,10 @@ interface MetadataObj {
 
 const reqSchemas: MetadataObj = {
   "/user/signup": z.object({
-    name: z.string(),
-    surname: z.string(),
+    name: z.string().min(1),
+    surname: z.string().min(1),
     email: z.string().email(),
-    password: z.string(),
+    password: z.string().min(8),
   }),
   "/user/signin": z.object({
     email: z.string().email(),
@@ -38,8 +38,10 @@ const validate = (req: Request, res: Response, next: NextFunction) => {
       next();
     } catch (error) {
       console.log("Zod issue", error.issues);
-      throw new CustomError(
-        `Request Schema error at ${path}, Issues: ${zodIssues(error.issues)}`
+      next(
+        new CustomError(
+          `Request Schema error at ${path}, Issues: ${zodIssues(error.issues)}`
+        )
       );
     }
   } else {

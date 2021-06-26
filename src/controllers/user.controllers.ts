@@ -22,4 +22,13 @@ const signin = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export default { signup, signin };
+const account = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await user.account(req.body.user.token);
+    res.status(200).json(response(true, "user account details", result));
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default { signup, signin, account };

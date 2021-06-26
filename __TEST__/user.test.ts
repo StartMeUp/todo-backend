@@ -7,12 +7,13 @@ import {
 } from "../src/utils/database";
 import Model from "../src/models";
 import { response as res } from "../src/utils/functions";
+import { Response } from "express";
 
 const johnDoe = {
   name: "John",
   surname: "Doe",
   email: "john@email.com",
-  password: "azerty",
+  password: "azertyazerty",
 };
 
 const wrongJohnDoe = {
@@ -82,7 +83,7 @@ describe("Testing user signin", () => {
     try {
       response = await request(app)
         .get("/user/signin")
-        .send({ email: "john@mail.com", password: "azerty" });
+        .send({ email: "john@mail.com", password: johnDoe.password });
     } catch (error) {
       expect(error.message).toBe(errorMessage);
     }
@@ -96,7 +97,7 @@ describe("Testing user signin", () => {
     try {
       response = await request(app)
         .get("/user/signin")
-        .send({ email: "john@email.com", password: "azertyazerty" });
+        .send({ email: johnDoe.email, password: "azertyazer" });
     } catch (error) {
       expect(error.message).toBe(errorMessage);
     }
@@ -105,10 +106,10 @@ describe("Testing user signin", () => {
   });
 
   it("should send a 200 status and a proper response with user's token if req data is correct", async () => {
-    const user = await Model.User.findOne({ email: johnDoe.email });
+    const user = await Model.User.findOne({ email: johnDoe.email }).lean();
     const response = await request(app)
       .get("/user/signin")
-      .send({ email: "john@email.com", password: "azerty" });
+      .send({ email: johnDoe.email, password: johnDoe.password });
     expect(response.status).toBe(200);
     expect(response.body).toEqual(
       res(true, "user successfully authenticated", {
@@ -116,6 +117,33 @@ describe("Testing user signin", () => {
       })
     );
   });
+});
+
+describe("Testing authentication on /user/account", () => {
+  it("should throw a 401 error if user in not authenticated", async () => {
+    let response: any;
+    const errorMessage = "Unauthorized";
+    try {
+      response = await request(app).get("/user/account");
+    } catch (error) {
+      expect(error.message).toBe(errorMessage);
+    }
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual(res(false, errorMessage, null));
+  });
+});
+
+it("should return the user data if authenticated with bearer token", async () => {
+  const user = await Model.User.findOne({ email: johnDoe.email }).lean();
+  if (user) {
+    user._id = user._id.toString();
+    const { hash, salt, ...rest } = user;
+    const response = await request(app)
+      .get("/user/account")
+      .set("Authorization", "Bearer " + user.token);
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(res(true, "user account details", rest));
+  }
 });
 
 afterAll(async () => {
