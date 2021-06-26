@@ -8,7 +8,11 @@ const app: Application = express();
 preRoutesMiddleware(app);
 
 // routes
-app.get("/test", (req: Request, res: Response) => {
+import userRoutes from "./routes/user.routes";
+app.use("/user", userRoutes);
+
+// test route
+app.post("/test", (req: Request, res: Response) => {
   res.status(200).json({ message: "test route", reqBody: req.body });
 });
 
