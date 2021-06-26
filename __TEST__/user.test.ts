@@ -6,7 +6,6 @@ import {
   dropAllCollections,
 } from "../src/utils/database";
 import Model from "../src/models";
-
 import { response as res } from "../src/utils/functions";
 
 const johnDoe = {
