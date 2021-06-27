@@ -12,7 +12,7 @@ const params = {
       /* required */
       Html: {
         Charset: "UTF-8",
-        Data: "HTML_FORMAT_BODY",
+        Data: "<h1>Heading 1</h1>",
       },
       Text: {
         Charset: "UTF-8",
