@@ -7,6 +7,7 @@
     "test": "jest --verbose",
     "start": "cross-env NODE_ENV=prod nodemon -r dotenv/config src/server.ts",
     "dev": "cross-env NODE_ENV=dev nodemon -r dotenv/config src/server.ts",
+    "oneFile": "cross-env NODE_ENV=dev nodemon -r dotenv/config src/emails/index.ts",
     "build": "tsc"
   },
   "keywords": [],
