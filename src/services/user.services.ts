@@ -1,6 +1,7 @@
 import Model from "../models";
 import { CustomError } from "../middlewares/error.middleware";
 import { hashPassword, checkPassword } from "../utils/functions";
+import { sendEmail, emailTemplates } from "../emails/sendmail";
 
 const signup = async (data: {
   email: string;
@@ -23,6 +24,11 @@ const signup = async (data: {
     ...hashPassword(password),
   });
   await newUser.save();
+
+  sendEmail(
+    { email: newUser.email, name: newUser.name },
+    emailTemplates.signup
+  );
 
   //4. send result to ctrl
   return { token: newUser.token };
