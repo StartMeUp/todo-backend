@@ -12,7 +12,7 @@ import { Response } from "express";
 const johnDoe = {
   name: "John",
   surname: "Doe",
-  email: "john@email.com",
+  email: `${process.env.TEST_NEWUSER_EMAIL}`,
   password: "azertyazerty",
 };
 
@@ -42,9 +42,11 @@ describe("Testing user signup", () => {
   it("should send a 201 status and a proper response if req data is correct", async () => {
     const response = await request(app).post("/user/signup").send(johnDoe);
     const token: string = response.body.data.token;
+    const emailNotification: boolean = response.body.data.emailNotification;
     expect(response.status).toBe(201);
+    expect(emailNotification).toBe(true);
     expect(response.body).toEqual(
-      res(true, "user successfully created", { token })
+      res(true, "user successfully created", { token, emailNotification })
     );
   });
 

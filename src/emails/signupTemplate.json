@@ -1,0 +1,7 @@
+{
+  "Template": {
+    "TemplateName": "signupTemplate",
+    "SubjectPart": "Hey {{name}}! Welcome to our site!",
+    "HtmlPart": "<html>\r\n<head>\r\n<title>Welcome to our site !</title>\r\n<body>\r\n<p>Hi {{name}},</p>\r\n<p>Thanks for signing up, your account has been successfully created.</p>\r\n<p>See you soon !</p>\r\n</body>\r\n</head>\r\n</html>"
+  }
+}
