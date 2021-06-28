@@ -4,12 +4,15 @@ export const emailTemplates = {
   signup: "signupTemplate",
 };
 
-export const sendEmail = (
+let success: boolean;
+
+export const sendEmail = async (
   data: { email: string; [key: string]: any },
   template: string
 ) => {
   //const escapedData = JSON.stringify(data).replace(/"/g, '\\"');
   // does not work according to documentation requiring escaped json
+
   const { email, ...rest } = data;
 
   const params = {
@@ -25,11 +28,14 @@ export const sendEmail = (
     .promise();
 
   // Handle promise's fulfilled/rejected states
-  sendPromise
+  await sendPromise
     .then(function (data) {
-      console.log(data);
+      success = true;
     })
     .catch(function (err) {
+      success = false;
       console.error(err, err.stack);
     });
+
+  return success;
 };

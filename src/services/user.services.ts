@@ -25,13 +25,13 @@ const signup = async (data: {
   });
   await newUser.save();
 
-  sendEmail(
+  const emailNotification = await sendEmail(
     { email: newUser.email, name: newUser.name },
     emailTemplates.signup
   );
 
   //4. send result to ctrl
-  return { token: newUser.token };
+  return { token: newUser.token, emailNotification };
 };
 
 const signin = async (data: { email: string; password: string }) => {
