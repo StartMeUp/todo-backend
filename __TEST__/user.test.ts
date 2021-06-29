@@ -7,7 +7,6 @@ import {
 } from "../src/utils/database";
 import Model from "../src/models";
 import { response as res } from "../src/utils/functions";
-import { Response } from "express";
 
 const johnDoe = {
   name: "John",
