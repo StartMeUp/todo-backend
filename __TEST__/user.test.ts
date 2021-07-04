@@ -113,9 +113,7 @@ describe("Testing user signin", () => {
       .send({ email: johnDoe.email, password: johnDoe.password });
     expect(response.status).toBe(200);
     expect(response.body).toEqual(
-      res(true, "user successfully authenticated", {
-        token: `${user ? user.token : "error test user signin"}`,
-      })
+      res(true, "user successfully authenticated", { todos: [] })
     );
   });
 });

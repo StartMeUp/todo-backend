@@ -39,4 +39,19 @@ const update = async (data: { todo: Partial<ITodo>; user: IUser }) => {
   return await getAll(user);
 };
 
-export default { getAll, add, update };
+const deleteTodo = async (data: { todo: Partial<ITodo>; user: IUser }) => {
+  //0. destructure
+  const { todo, user } = data;
+
+  //1. make sure user is owner
+  if (user._id.toString() !== todo.owner)
+    throw new CustomError("Error, user is not the owner");
+
+  //2. Delete todo
+  await Model.Todo.findByIdAndDelete(todo._id);
+
+  //3. return user's todos
+  return await getAll(user);
+};
+
+export default { getAll, add, update, deleteTodo };

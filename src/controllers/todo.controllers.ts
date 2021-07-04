@@ -29,4 +29,13 @@ const update = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export default { add, getAll, update };
+const deleteTodo = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await todo.deleteTodo(req.body);
+    res.status(201).json(response(true, "todo successfully deleted", result));
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default { add, getAll, update, deleteTodo };
