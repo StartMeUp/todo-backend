@@ -2,6 +2,8 @@ import Model from "../models";
 import { CustomError } from "../middlewares/error.middleware";
 import { hashPassword, checkPassword } from "../utils/functions";
 import { sendEmail, emailTemplates } from "../emails/sendmail";
+import todo from "../services/todo.services";
+import { IUser } from "../models/user.model";
 
 const signup = async (data: {
   email: string;
@@ -45,21 +47,17 @@ const signin = async (data: { email: string; password: string }) => {
   //3. check password
   checkPassword(user, password);
 
-  //4. return user token
-  return { token: user.token };
+  //4. retrieve user's todos
+  const todos = await todo.getAll(user);
+
+  //5. return data
+  return { token: user.token, todos };
 };
 
-const account = async (token: string) => {
+const account = async (user: IUser) => {
   //1. get the user data
-  const user = await Model.User.findOne({ token }).lean();
-  if (user) {
-    const { hash, salt, ...rest } = user;
-    return rest;
-  } else {
-    throw new CustomError(
-      "An error has occured while retrieving the user info"
-    );
-  }
+  const { hash, salt, ...rest } = user;
+  return rest;
 };
 
 export default { signup, signin, account };

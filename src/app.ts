@@ -11,6 +11,9 @@ preRoutesMiddleware(app);
 import userRoutes from "./routes/user.routes";
 app.use("/user", userRoutes);
 
+import todoRoutes from "./routes/todo.routes";
+app.use("/todo", todoRoutes);
+
 // test route
 app.post("/test", (req: Request, res: Response) => {
   res.status(200).json({ message: "test route", reqBody: req.body });
