@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 // mongoose.connect
 const database: string =
   process.env.NODE_ENV === "dev"
-    ? "mongodb://localhost/expressmongotypescript"
+    ? "mongodb://localhost/todobackend"
     : process.env.NODE_ENV === "test"
     ? "mongodb://localhost/test"
     : `${process.env.MONGO_URI}`;

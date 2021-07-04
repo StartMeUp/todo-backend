@@ -1,10 +1,18 @@
-import IUser from "../types/user.type";
-import { Schema, model } from "mongoose";
+import { Schema, model, Document } from "mongoose";
+
+export interface IUser extends Document {
+  name: string;
+  surname: string;
+  email: string;
+  hash: string;
+  salt: string;
+  token: string;
+}
 
 const capitalize = (str: string) =>
   str.replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase()));
 
-const userSchema = new Schema({
+const userSchema = new Schema<IUser>({
   name: { type: String, trim: true, required: true },
   surname: { type: String, trim: true, required: true, uppercase: true },
   email: {

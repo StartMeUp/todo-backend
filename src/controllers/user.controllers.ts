@@ -5,7 +5,9 @@ import user from "../services/user.services";
 const signup = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await user.signup(req.body);
-    res.status(201).json(response(true, "user successfully created", result));
+    const { token, ...rest } = result;
+    res.cookie("UserToken", token);
+    res.status(201).json(response(true, "user successfully created", rest));
   } catch (error) {
     next(error);
   }
@@ -14,9 +16,11 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 const signin = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await user.signin(req.body);
+    const { todos, token } = result;
+    res.cookie("UserToken", token);
     res
       .status(200)
-      .json(response(true, "user successfully authenticated", result));
+      .json(response(true, "user successfully authenticated", todos));
   } catch (error) {
     next(error);
   }
@@ -24,7 +28,7 @@ const signin = async (req: Request, res: Response, next: NextFunction) => {
 
 const account = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const result = await user.account(req.body.user.token);
+    const result = await user.account(req.body.user);
     res.status(200).json(response(true, "user account details", result));
   } catch (error) {
     next(error);

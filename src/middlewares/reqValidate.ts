@@ -1,6 +1,12 @@
 import { z } from "zod";
+import mongoose from "mongoose";
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "./error.middleware";
+
+const userDoc = z.object({
+  _id: z.instanceof(mongoose.Types.ObjectId),
+  token: z.string(),
+});
 
 interface MetadataObj {
   [key: string]: z.AnyZodObject;
@@ -17,6 +23,30 @@ const reqSchemas: MetadataObj = {
     email: z.string().email(),
     password: z.string(),
   }),
+  "/todo": z.object({
+    user: userDoc,
+  }),
+  "/todo/add": z.object({
+    todo: z.object({
+      title: z.string(),
+      description: z.string(),
+    }),
+    user: userDoc,
+  }),
+  "/todo/update": z.object({
+    todo: z.object({
+      _id: z.string(),
+      title: z.string().optional(),
+      done: z.boolean().optional(),
+      description: z.string().optional(),
+      owner: z.string(),
+    }),
+    user: userDoc,
+  }),
+  "/todo/delete": z.object({
+    todo: z.object({ _id: z.string(), owner: z.string() }),
+    user: userDoc,
+  }),
 };
 
 const zodIssues = (issues: [{ path: string[] }]) => {
@@ -27,8 +57,9 @@ const zodIssues = (issues: [{ path: string[] }]) => {
   return issuesList;
 };
 
+const routes: string[] = Object.keys(reqSchemas);
+
 const validate = (req: Request, res: Response, next: NextFunction) => {
-  const routes = Object.keys(reqSchemas);
   const path = req.originalUrl;
 
   if (routes.includes(path)) {
