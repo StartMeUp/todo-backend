@@ -69,7 +69,7 @@ describe("Testing user signin", () => {
       "Request Schema error at /user/signin, Issues: email, password";
     try {
       response = await request(app)
-        .get("/user/signin")
+        .post("/user/signin")
         .send({ email: "johnemail", password: undefined });
     } catch (error) {
       expect(error.message).toBe(errorMessage);
@@ -83,7 +83,7 @@ describe("Testing user signin", () => {
     const errorMessage = "Unauthorized, email doesn't exist";
     try {
       response = await request(app)
-        .get("/user/signin")
+        .post("/user/signin")
         .send({ email: "john@mail.com", password: johnDoe.password });
     } catch (error) {
       expect(error.message).toBe(errorMessage);
@@ -97,7 +97,7 @@ describe("Testing user signin", () => {
     const errorMessage = "Unauthorized, wrong password";
     try {
       response = await request(app)
-        .get("/user/signin")
+        .post("/user/signin")
         .send({ email: johnDoe.email, password: "azertyazer" });
     } catch (error) {
       expect(error.message).toBe(errorMessage);
@@ -109,7 +109,7 @@ describe("Testing user signin", () => {
   it("should send a 200 status and a proper response with user's token if req data is correct", async () => {
     const user = await Model.User.findOne({ email: johnDoe.email }).lean();
     const response = await request(app)
-      .get("/user/signin")
+      .post("/user/signin")
       .send({ email: johnDoe.email, password: johnDoe.password });
     expect(response.status).toBe(200);
     expect(response.body).toEqual(
