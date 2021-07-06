@@ -4,7 +4,7 @@ import validate from "./reqValidate";
 import isAuthenticated from "./isAuthenticated";
 
 const preRoutesMiddleware = (app: Application) => {
-  app.use(cors());
+  app.use(cors({ origin: true, credentials: true }));
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(isAuthenticated);

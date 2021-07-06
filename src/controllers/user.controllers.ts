@@ -6,8 +6,10 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await user.signup(req.body);
     const { token, ...rest } = result;
-    res.cookie("UserToken", token);
-    res.status(201).json(response(true, "user successfully created", rest));
+    res
+      .status(201)
+      .cookie("UserToken", token)
+      .json(response(true, "user successfully created", rest));
   } catch (error) {
     next(error);
   }
@@ -17,9 +19,9 @@ const signin = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await user.signin(req.body);
     const { todos, token } = result;
-    res.cookie("UserToken", token);
     res
       .status(200)
+      .cookie("UserToken", token)
       .json(response(true, "user successfully authenticated", todos));
   } catch (error) {
     next(error);

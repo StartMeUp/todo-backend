@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest --verbose",
     "start": "node -r dotenv/config dist/server.js",
+    "build:dev": "cross-env NODE_ENV=dev node -r dotenv/config dist/server.js",
     "dev": "cross-env NODE_ENV=dev nodemon -r dotenv/config src/server.ts",
     "oneFile": "cross-env NODE_ENV=dev ts-node -r dotenv/config src/emails/sendmail.ts",
     "createTemplate": "cross-env NODE_ENV=dev ts-node -r dotenv/config src/utils/createTemplate.ts",

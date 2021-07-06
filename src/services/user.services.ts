@@ -27,12 +27,13 @@ const signup = async (data: {
   });
   await newUser.save();
 
+  // send email notification
   const emailNotification = await sendEmail(
     { email: newUser.email, name: newUser.name },
     emailTemplates.signup
   );
 
-  //4. send result to ctrl
+  //5. send result to ctrl
   return { token: newUser.token, emailNotification };
 };
 

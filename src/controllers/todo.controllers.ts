@@ -14,7 +14,7 @@ const add = async (req: Request, res: Response, next: NextFunction) => {
 const getAll = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await todo.getAll(req.body.user);
-    res.status(201).json(response(true, "user's todos", result));
+    res.status(200).json(response(true, "user's todos", result));
   } catch (error) {
     next(error);
   }
@@ -23,7 +23,7 @@ const getAll = async (req: Request, res: Response, next: NextFunction) => {
 const update = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await todo.update(req.body);
-    res.status(201).json(response(true, "user's todo updated", result));
+    res.status(200).json(response(true, "user's todo updated", result));
   } catch (error) {
     next(error);
   }
@@ -32,7 +32,7 @@ const update = async (req: Request, res: Response, next: NextFunction) => {
 const deleteTodo = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await todo.deleteTodo(req.body);
-    res.status(201).json(response(true, "todo successfully deleted", result));
+    res.status(200).json(response(true, "todo successfully deleted", result));
   } catch (error) {
     next(error);
   }
