@@ -9,7 +9,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
     res
       .status(201)
       .cookie("UserToken", token)
-      .json(response(true, "user successfully created", rest));
+      .json(response(true, "user successfully created", result));
   } catch (error) {
     next(error);
   }
@@ -22,7 +22,7 @@ const signin = async (req: Request, res: Response, next: NextFunction) => {
     res
       .status(200)
       .cookie("UserToken", token)
-      .json(response(true, "user successfully authenticated", rest));
+      .json(response(true, "user successfully authenticated", result));
   } catch (error) {
     next(error);
   }
