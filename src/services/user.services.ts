@@ -34,7 +34,7 @@ const signup = async (data: {
   );
 
   //5. send result to ctrl
-  return { token: newUser.token, emailNotification };
+  return { token: newUser.token, emailNotification, name: newUser.name };
 };
 
 const signin = async (data: { email: string; password: string }) => {
@@ -52,7 +52,7 @@ const signin = async (data: { email: string; password: string }) => {
   const todos = await todo.getAll(user);
 
   //5. return data
-  return { token: user.token, todos };
+  return { token: user.token, name: user.name, todos };
 };
 
 const account = async (user: IUser) => {

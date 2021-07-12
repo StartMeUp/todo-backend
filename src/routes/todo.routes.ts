@@ -9,6 +9,6 @@ router.post("/add", todo.add);
 
 router.patch("/update", todo.update);
 
-router.delete("/delete", todo.deleteTodo);
+router.post("/delete", todo.deleteTodo);
 
 export default router;

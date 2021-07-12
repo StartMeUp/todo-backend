@@ -18,11 +18,11 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 const signin = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await user.signin(req.body);
-    const { todos, token } = result;
+    const { token, ...rest } = result;
     res
       .status(200)
       .cookie("UserToken", token)
-      .json(response(true, "user successfully authenticated", todos));
+      .json(response(true, "user successfully authenticated", rest));
   } catch (error) {
     next(error);
   }

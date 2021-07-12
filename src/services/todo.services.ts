@@ -4,7 +4,7 @@ import { ITodo } from "../models/todo.model";
 import { IUser } from "../models/user.model";
 
 const getAll = async (user: IUser) => {
-  return { todos: await Model.Todo.find({ owner: user }).lean() };
+  return await Model.Todo.find({ owner: user }).lean();
 };
 
 const add = async (data: { todo: Partial<ITodo>; user: IUser }) => {
@@ -30,7 +30,8 @@ const update = async (data: { todo: Partial<ITodo>; user: IUser }) => {
   const { _id: todoId, owner, ...rest } = todo;
 
   //2. make sure user is owner
-  if (userId !== owner) throw new CustomError("Error, user is not the owner");
+  if (userId !== owner.toString())
+    throw new CustomError("Error, user is not the owner");
 
   //3. update todo
   await Model.Todo.findByIdAndUpdate(todoId, rest);
