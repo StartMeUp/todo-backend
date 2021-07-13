@@ -13,6 +13,7 @@ const johnDoe = {
   surname: "Doe",
   email: `${process.env.TEST_NEWUSER_EMAIL}`,
   password: "azertyazerty",
+  token: "",
 };
 
 const wrongJohnDoe = {
@@ -41,11 +42,16 @@ describe("Testing user signup", () => {
   it("should send a 201 status and a proper response if req data is correct", async () => {
     const response = await request(app).post("/user/signup").send(johnDoe);
     const token: string = response.body.data.token;
+    johnDoe.token = token;
     const emailNotification: boolean = response.body.data.emailNotification;
     expect(response.status).toBe(201);
     expect(emailNotification).toBe(true);
     expect(response.body).toEqual(
-      res(true, "user successfully created", { token, emailNotification })
+      res(true, "user successfully created", {
+        token,
+        emailNotification,
+        name: johnDoe.name,
+      })
     );
   });
 
@@ -113,7 +119,11 @@ describe("Testing user signin", () => {
       .send({ email: johnDoe.email, password: johnDoe.password });
     expect(response.status).toBe(200);
     expect(response.body).toEqual(
-      res(true, "user successfully authenticated", { todos: [] })
+      res(true, "user successfully authenticated", {
+        todos: [],
+        name: johnDoe.name,
+        token: johnDoe.token,
+      })
     );
   });
 });
