@@ -1,4 +1,4 @@
-#Yet another todo backend
+# Yet another todo backend
 
 This backend is only some kind of playground to test and show the implementation of libraries and good practices. The corresponding front-end is here: https://github.com/StartMeUp/todo-front
 
