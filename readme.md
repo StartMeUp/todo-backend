@@ -4,7 +4,7 @@ This backend is only some kind of playground to test and show the implementation
 
 In this project:
 
-- project coded in typescript
+- Express project coded in typescript + MongoDB
 - NODE_ENV management at script launch
 - code decoupled and split in various folders for better maintainability: services > controllers > routes
 - route testing with Jest and Supertest
